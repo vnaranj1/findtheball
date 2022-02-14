@@ -1,10 +1,18 @@
 package cat.proven.findtheball.views;
 
+import java.awt.CardLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class GamePanel extends JPanel implements ActionListener{
@@ -15,39 +23,53 @@ public class GamePanel extends JPanel implements ActionListener{
     private final int PANELS=9;
     
     //Constructor
-    public GamePanel(ActionListener al) {
+    public GamePanel(ActionListener al) throws IOException {
         initComponents();
     }
 
     //Components initialization
-    private void initComponents() {
+    private void initComponents() throws IOException {
         
+        //Load images
+        File f = new File ("hola");
+        System.out.println(f.getAbsolutePath());
+        BufferedImage image = ImageIO.read(new File("images/nothing.png"));
+        
+        //Initialize Layout
         setLayout(new GridLayout(3,3));
         
+        //Initialize little panels
         for (int i = 0; i < PANELS; i++) {
-            //Adds the panel to a list of littlepanels
-            panels.add(new LittlePanel(this));
-            //Adds the panel to the bigpanel
+            //Adds the panel to a list of littlepanels, setting the image of the pannel
+            panels.add(new LittlePanel(this,image));
+            //Adds the panel to the game panel
             add(panels.get(i));            
         }
     }
-    
-    /**
-     * gets value of celsius textfield
-     * @return celsius in textfield or 0 if value does not validate.
-     * @throws NumberFormatException if celsius is not a valid numeric value
-     */
-    public double getCelsius() throws NumberFormatException {
-     /*   String text = txtCelsius.getText();
-        double value = 0;
-        value = Double.parseDouble(text);
-        return value;*/
-        return 0;
+
+     @Override
+    public void actionPerformed(ActionEvent e) {
+        String action = e.getActionCommand();
+
+        switch (action) {
+            case "flip":
+                showImage(e);
+                break;
+        }
+        System.out.println("Execution action on Game Panel: " + action);
+
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private void processAction(String action) {
+        if (action != null) {
+        }
+    }
+    
+    private void showImage(ActionEvent e){
+        JButton button= (JButton)e.getSource();
+        LittlePanel panel = (LittlePanel)button.getParent();
+        ((CardLayout)panel.getLayout()).show(panel,"image");
+        
     }
     
     

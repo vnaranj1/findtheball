@@ -6,6 +6,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -30,38 +33,42 @@ public class FindTheBallFrame extends JFrame implements ActionListener {
 
     private void initComponents() {
         
-        //Initialize Frame
-        this.setTitle("Find The Ball application");
-        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        
-        this.addWindowListener( new WindowAdapter() {
-            @Override
-            public void windowClosing( WindowEvent evt ) {
-                exitApplication();
-            }
-        } );
-        
-        //Initialize menubar
-        this.menuBar = buidMenuBar();
-        this.setJMenuBar(menuBar);
-        
-        //Initialize contentPane
-        Container pane = this.getContentPane();
-        layout=new CardLayout();
-        pane.setLayout(layout);
-        
-        //Add gamePanel
-        gamePanel = new GamePanel(this);
-        pane.add("game",gamePanel);
-        
-        //Sdd configPanel
-        configPanel= new ConfigPanel();
-        pane.add("config",configPanel);
-        
-        //Show frame
-        this.setLocationRelativeTo(null);
-        this.setSize(300, 200);
-        this.setVisible(true);
+        try {
+            //Initialize Frame
+            this.setTitle("Find The Ball application");
+            this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            
+            this.addWindowListener( new WindowAdapter() {
+                @Override
+                public void windowClosing( WindowEvent evt ) {
+                    exitApplication();
+                }
+            } );
+            
+            //Initialize menubar
+            this.menuBar = buidMenuBar();
+            this.setJMenuBar(menuBar);
+            
+            //Initialize contentPane
+            Container pane = this.getContentPane();
+            layout=new CardLayout();
+            pane.setLayout(layout);
+            
+            //Add gamePanel
+            gamePanel = new GamePanel(this);
+            pane.add("game",gamePanel);
+            
+            //Sdd configPanel
+            configPanel= new ConfigPanel();
+            pane.add("config",configPanel);
+            
+            //Show frame
+            this.setLocationRelativeTo(null);
+            this.setSize(300, 200);
+            this.setVisible(true);
+        } catch (IOException ex) {
+            Logger.getLogger(FindTheBallFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private JMenuBar buidMenuBar() {
@@ -124,7 +131,7 @@ public class FindTheBallFrame extends JFrame implements ActionListener {
                 default:                   
                     break;
             } 
-            System.out.println("Execution action: "+action);
+            System.out.println("Execution action on Main Frame: "+action);
         }
     }
 

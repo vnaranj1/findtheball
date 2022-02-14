@@ -6,9 +6,16 @@
 package cat.proven.findtheball.views;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Image;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 
 /**
  *
@@ -17,22 +24,40 @@ import javax.swing.JPanel;
 public class LittlePanel extends JPanel{
     
     private JButton button;
+    private JLabel  imageLabel;
+    private CardLayout layout;
     private ActionListener al;
         
     //Constructor
-    public LittlePanel(ActionListener al) {
+    public LittlePanel(ActionListener al, BufferedImage image) {
         this.al = al;
-        initComponents();
+        initComponents(image);
     }
 
     //Components initialization
-    private void initComponents() {
+    private void initComponents(BufferedImage image) {
         
         //setLayout(new GridLayout(3,3));
-        button=new JButton("but..");
-        this.setLayout(new BorderLayout());
-        this.add(button,BorderLayout.CENTER);
+        layout=new CardLayout();
+        setLayout(new CardLayout());
         
+        //Initialize the button
+        button=new JButton("try");
+        button.setActionCommand("flip");
+        button.addActionListener(al);
+
+        //Add the button
+        add(button,"button");
+        
+        //Initialize the image
+        Image scaledImage=image.getScaledInstance(64,64,Image.SCALE_SMOOTH);
+        
+        ImageIcon nue= new ImageIcon(scaledImage);
+        imageLabel = new JLabel(nue,JLabel.CENTER);
+        add(imageLabel,"image");
+        
+
+                
     }
     
 }
