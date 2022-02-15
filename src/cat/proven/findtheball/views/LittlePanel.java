@@ -39,7 +39,7 @@ public class LittlePanel extends JPanel{
         
         //setLayout(new GridLayout(3,3));
         layout=new CardLayout();
-        setLayout(new CardLayout());
+        setLayout(layout);
         
         //Initialize the button
         button=new JButton("try");
@@ -54,10 +54,17 @@ public class LittlePanel extends JPanel{
         
         ImageIcon nue= new ImageIcon(scaledImage);
         imageLabel = new JLabel(nue,JLabel.CENTER);
-        add(imageLabel,"image");
-        
-
-                
+        add(imageLabel,"image");                
     }
+    
+    public void showButton(){
+        layout.show(this,"button");    
+    }
+    
+    public void showImage(){
+        layout.show((JPanel)this,"image");    
+    }
+
+    
     
 }

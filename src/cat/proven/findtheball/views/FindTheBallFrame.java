@@ -1,5 +1,6 @@
 package cat.proven.findtheball.views;
 
+import cat.proven.findtheball.model.FindTheBall;
 import java.awt.CardLayout;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
@@ -58,13 +59,13 @@ public class FindTheBallFrame extends JFrame implements ActionListener {
             gamePanel = new GamePanel(this);
             pane.add("game",gamePanel);
             
-            //Sdd configPanel
+            //Add configPanel
             configPanel= new ConfigPanel();
             pane.add("config",configPanel);
             
             //Show frame
             this.setLocationRelativeTo(null);
-            this.setSize(300, 200);
+            this.setSize(600, 400);
             this.setVisible(true);
         } catch (IOException ex) {
             Logger.getLogger(FindTheBallFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -150,7 +151,13 @@ public class FindTheBallFrame extends JFrame implements ActionListener {
      * Displays game mode
      */
     private void displayGameMode() {
+        //Show game panel
         layout.show(this.getContentPane(), "game");
+        System.out.println(FindTheBall.generateRandom());
+        
+        //Initialize little panels
+        gamePanel.initializePanels();
+        //Asignar la imagen de pelota encontrada
 
     }
     /**
@@ -161,7 +168,9 @@ public class FindTheBallFrame extends JFrame implements ActionListener {
 
     }
 
-
+    /**
+     * Displays about dialog
+     */
     private void aboutDialog() {
         JOptionPane.showMessageDialog(this, aboutMessage, "About", JOptionPane.INFORMATION_MESSAGE);
     }

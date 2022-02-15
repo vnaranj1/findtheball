@@ -1,5 +1,6 @@
 package cat.proven.findtheball.views;
 
+import cat.proven.findtheball.model.FindTheBall;
 import java.awt.CardLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -33,15 +34,16 @@ public class GamePanel extends JPanel implements ActionListener{
         //Load images
         File f = new File ("hola");
         System.out.println(f.getAbsolutePath());
-        BufferedImage image = ImageIO.read(new File("images/nothing.png"));
+        BufferedImage nothingImage = ImageIO.read(new File("images/nothing.png"));
+        BufferedImage somethingImage = ImageIO.read(new File("images/ball.png"));
         
         //Initialize Layout
         setLayout(new GridLayout(3,3));
         
         //Initialize little panels
         for (int i = 0; i < PANELS; i++) {
-            //Adds the panel to a list of littlepanels, setting the image of the pannel
-            panels.add(new LittlePanel(this,image));
+            //Adds the panel to a list of littlepanels, setting the nothingImage of the pannel
+            panels.add(new LittlePanel(this,nothingImage));
             //Adds the panel to the game panel
             add(panels.get(i));            
         }
@@ -68,9 +70,15 @@ public class GamePanel extends JPanel implements ActionListener{
     private void showImage(ActionEvent e){
         JButton button= (JButton)e.getSource();
         LittlePanel panel = (LittlePanel)button.getParent();
-        ((CardLayout)panel.getLayout()).show(panel,"image");
-        
+        panel.showImage();
     }
     
+    public void initializePanels(){
+        for (int i = 0; i < FindTheBall.PANELS; i++) {
+            //Adds the panel to a list of littlepanels, setting the nothingImage of the pannel
+            panels.get(i).showButton();
+        }
+
+    }
     
 }
