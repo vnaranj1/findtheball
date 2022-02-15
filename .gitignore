@@ -1,7 +1,4 @@
 *.class
 .DS_Store
 build/
-.DS_Store
 *.properties
-.DS_Store
-build/classes/cat/proven/findtheball/model/FindTheBall.class
