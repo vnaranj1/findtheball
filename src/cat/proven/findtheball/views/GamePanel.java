@@ -27,13 +27,16 @@ public class GamePanel extends JPanel implements ActionListener{
     private final int HEIGHT=3;
     
     //max number of tries to get the prize
-    int maxTries;
+    private int maxTries;
     
     //Tries counter
-    int tries;
+    private int tries;
     
     //Number of prizes
-    int prizes;
+    private int prizes;
+    
+    //Number of prizes found
+    private int found;
     
     //To know if the game has ended
     boolean endedGame=false;
@@ -55,12 +58,15 @@ public class GamePanel extends JPanel implements ActionListener{
         //Initialize little panels: set the button and the image of each panel
         initializePanels(nothingImage, somethingImage);
         
+        //Sets the initial maximum number of tries and prizes
+        maxTries=6;
+        prizes=2;
+        found=0;
+        
         //Reset all panels.  For each panel: show buttons and 
         resetPanels();
         
-        //Sets the initial maximum number of tries and prizes
-        maxTries=3;
-        prizes=1;
+
     }
 
     /**
@@ -93,9 +99,11 @@ public class GamePanel extends JPanel implements ActionListener{
     /**
      * Shows the image behind a little panel.
      * If the  little panel is priced, then shows a message, and stops the game
+     * If tries are exhausted, then hows a message, and stops the game
      * @param e the source event of the action
      */
     private void flipBoard(ActionEvent e){      
+        System.out.println("tries: "+tries+" maxtries: "+maxTries);
         
         // Only works while the game is been played
         if (endedGame) {
@@ -120,14 +128,19 @@ public class GamePanel extends JPanel implements ActionListener{
         //Check the kind of little panel selected
         //if the selected little panel is not the one that contains the image, 
         if (panel.isPrizePanel()){
-            //Game Over
-            endedGame=true;
-            //Show message
-            JOptionPane.showMessageDialog(
-                this, 
-                "Enhorabona.  Has trobat la imatge!!", 
-                "Ended game", 
-                JOptionPane.INFORMATION_MESSAGE);
+            
+            found++;
+            if (found==prizes){
+                //Game Over
+                endedGame=true;
+                //Show message
+                String imatge=found>1?"les imatges":"l'imatge";
+                JOptionPane.showMessageDialog(
+                    this, 
+                    "Enhorabona.  Has trobat "+imatge+"!!", 
+                    "Ended game", 
+                    JOptionPane.INFORMATION_MESSAGE);
+            }
         }
         //If was the last try, then the game is over, and the player looses
         else if (tries>=maxTries) {
@@ -137,8 +150,6 @@ public class GamePanel extends JPanel implements ActionListener{
                 "Has perdut.  Número d'intets exhaurit", 
                 "Ended game", 
                 JOptionPane.INFORMATION_MESSAGE);
-
-            return;
         }
         
     }
@@ -155,6 +166,7 @@ public class GamePanel extends JPanel implements ActionListener{
 
         maxTries=panel.getTries();
         prizes=panel.getPrizes();
+        found=0;
         
         
     }
@@ -188,16 +200,36 @@ public class GamePanel extends JPanel implements ActionListener{
             panels.get(i).setEmptyPanel();            
         }
         
-        //Random selection on a panel to set the prize
-        int randomPanel=generateRandom();
-        panels.get(randomPanel).setPrizePanel();
+        setPrizes();
         
         //Start game
         endedGame=false;
         
         //Initialize number of tries
         tries=0;
+        found=0;
 
+    }
+    
+    /**
+     * Set the little panes with prize depending on the configuration value
+     */ 
+    private void setPrizes() {
+        int settedPrizes=0;
+                
+        while (settedPrizes<prizes){
+            //Random selection on a panel to set the prize
+            int randomPanel=generateRandom();        
+            LittlePanel panel = panels.get(randomPanel);        
+            if (!panel.isPrizePanel()){
+                panel.setPrizePanel();
+                settedPrizes++;
+            }
+        }
+        
+        
+        
+        
     }
     
     

@@ -15,7 +15,7 @@ public class ConfigPanel extends JPanel{
     
     
     public int getTries(){
-        return 6;
+        return 3;
     }
 
     public int getPrizes(){
