@@ -5,17 +5,14 @@
  */
 package cat.proven.findtheball.views;
 
-import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Image;
 import java.awt.event.ActionListener;
-import javax.swing.JButton;
-import javax.swing.JPanel;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 /**
  *
@@ -57,10 +54,16 @@ public class LittlePanel extends JPanel{
         add(imageLabel,"image");                
     }
     
+    /** 
+     *  Shows the button of the little panel
+     */
     public void showButton(){
         layout.show(this,"button");    
     }
     
+    /** 
+     *  Shows the image
+     */
     public void showImage(){
         layout.show((JPanel)this,"image");    
     }
