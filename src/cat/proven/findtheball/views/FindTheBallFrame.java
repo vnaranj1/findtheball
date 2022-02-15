@@ -153,10 +153,9 @@ public class FindTheBallFrame extends JFrame implements ActionListener {
     private void displayGameMode() {
         //Show game panel
         layout.show(this.getContentPane(), "game");
-        System.out.println(FindTheBall.generateRandom());
         
         //Initialize little panels
-        gamePanel.initializePanels();
+        gamePanel.resetPanels();
         //Asignar la imagen de pelota encontrada
 
     }

@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -18,6 +19,7 @@ import javax.swing.JPanel;
 
 public class GamePanel extends JPanel implements ActionListener{
 
+    //The list of all the little planes that are shown
     private List<LittlePanel> panels =new ArrayList();
     
     //TODO: hacer esto variable y configurable
@@ -37,16 +39,9 @@ public class GamePanel extends JPanel implements ActionListener{
         BufferedImage nothingImage = ImageIO.read(new File("images/nothing.png"));
         BufferedImage somethingImage = ImageIO.read(new File("images/ball.png"));
         
-        //Initialize Layout
-        setLayout(new GridLayout(3,3));
+        initializePanels(nothingImage, somethingImage);
         
-        //Initialize little panels
-        for (int i = 0; i < PANELS; i++) {
-            //Adds the panel to a list of littlepanels, setting the nothingImage of the pannel
-            panels.add(new LittlePanel(this,nothingImage));
-            //Adds the panel to the game panel
-            add(panels.get(i));            
-        }
+        resetPanels();
     }
 
      @Override
@@ -73,12 +68,39 @@ public class GamePanel extends JPanel implements ActionListener{
         panel.showImage();
     }
     
-    public void initializePanels(){
-        for (int i = 0; i < FindTheBall.PANELS; i++) {
+    private void initializePanels(BufferedImage nothingImage, BufferedImage somethingImage) {
+        //Initialize Layout
+        setLayout(new GridLayout(3,3));
+
+        //Initialize little panels
+        for (int i = 0; i < PANELS; i++) {
+            //Adds the panel to a list of littlepanels, setting the nothingImage of the pannel
+            panels.add(new LittlePanel(this,nothingImage, somethingImage));
+            //Adds the panel to the game panel
+            add(panels.get(i));            
+        }
+    }
+    
+    public void resetPanels(){
+        for (int i = 0; i < PANELS; i++) {
             //Adds the panel to a list of littlepanels, setting the nothingImage of the pannel
             panels.get(i).showButton();
-        }
+            panels.get(i).setEmptyPanel();
 
+            
+        }
+        
+        int randomPanel=generateRandom();
+        panels.get(randomPanel).setPrizePanel();
+
+    }
+    
+    
+    private int generateRandom(){
+      int min = 0;
+      int max = PANELS-1;
+        
+      return (int)Math.floor(Math.random()*(max-min+1)+min);
     }
     
 }

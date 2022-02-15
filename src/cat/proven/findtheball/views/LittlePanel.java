@@ -20,19 +20,51 @@ import javax.swing.JPanel;
  */
 public class LittlePanel extends JPanel{
     
-    private JButton button;
-    private JLabel  imageLabel;
+    
     private CardLayout layout;
     private ActionListener al;
+    
+    //The button
+    private JButton button;
+    
+    //The image that will be shown when there is nothing
+    private ImageIcon badIcon;    
+    //The image that will be shown when there is a prize
+    private ImageIcon goodIcon;
+    //The label that contains the image
+    private JLabel imageLabel;
+    
+    
+    //It is true when the panel has the ball
+    private boolean isPrizePanel;
         
     //Constructor
-    public LittlePanel(ActionListener al, BufferedImage image) {
+    public LittlePanel(ActionListener al, BufferedImage badImage, BufferedImage goodImage) {
         this.al = al;
-        initComponents(image);
+        
+        initializeIcons(badImage,goodImage);
+        
+        initComponents();
+    }
+    
+    //Initializes the images
+    private void initializeIcons(BufferedImage badImage, BufferedImage goodImage) {
+        
+                //Escales the image to be shown 
+        Image scaledImageA=badImage.getScaledInstance(64,64,Image.SCALE_SMOOTH);
+        Image scaledImageB=goodImage.getScaledInstance(64,64,Image.SCALE_SMOOTH);
+        
+        badIcon= new ImageIcon(scaledImageA);
+        goodIcon= new ImageIcon(scaledImageB);
+
+        imageLabel = new JLabel(badIcon);
+        imageLabel.setHorizontalAlignment(JLabel.CENTER);
+        imageLabel.setVerticalAlignment(JLabel.CENTER);
+        
     }
 
     //Components initialization
-    private void initComponents(BufferedImage image) {
+    private void initComponents() {
         
         //setLayout(new GridLayout(3,3));
         layout=new CardLayout();
@@ -46,12 +78,10 @@ public class LittlePanel extends JPanel{
         //Add the button
         add(button,"button");
         
-        //Initialize the image
-        Image scaledImage=image.getScaledInstance(64,64,Image.SCALE_SMOOTH);
-        
-        ImageIcon nue= new ImageIcon(scaledImage);
-        imageLabel = new JLabel(nue,JLabel.CENTER);
         add(imageLabel,"image");                
+        
+        //At the begining, the panel has no prize
+        isPrizePanel=false;
     }
     
     /** 
@@ -66,6 +96,25 @@ public class LittlePanel extends JPanel{
      */
     public void showImage(){
         layout.show((JPanel)this,"image");    
+    }
+    
+    /**
+     * Sets the Little panel as prizePanel
+     */
+    public void setPrizePanel(){
+        isPrizePanel=true;
+        imageLabel.setIcon(goodIcon);
+                
+    }
+    
+    /**
+     * Sets the Little panel as empty panel
+     */
+    public void setEmptyPanel(){
+        isPrizePanel=false;
+        imageLabel.setIcon(badIcon);
+        
+                
     }
 
     
