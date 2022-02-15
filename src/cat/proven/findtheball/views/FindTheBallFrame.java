@@ -1,6 +1,5 @@
 package cat.proven.findtheball.views;
 
-import cat.proven.findtheball.model.FindTheBall;
 import java.awt.CardLayout;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
@@ -28,7 +27,7 @@ public class FindTheBallFrame extends JFrame implements ActionListener {
     private final String aboutMessage;
     
     public FindTheBallFrame() {
-        aboutMessage = "<html><p>Find the ball application</p><p><em>(c) ProvenSoft 2021</em></p></html>";
+        aboutMessage = "<html><p>Find the ball application</p><p><em>(c) ProvenSoft 2022</em></p></html>";
         initComponents();
     }
 
