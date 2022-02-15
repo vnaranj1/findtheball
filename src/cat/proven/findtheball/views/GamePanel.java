@@ -168,7 +168,7 @@ public class GamePanel extends JPanel implements ActionListener{
 
         maxTries=panel.getTries();
         prizes=panel.getPrizes();
-        found=0;
+        //found=0;
         
         
     }
@@ -226,9 +226,10 @@ public class GamePanel extends JPanel implements ActionListener{
         //Start game
         endedGame=false;
         
-        //Initialize number of tries
+        //Initialize number of tries and founds
         tries=0;
         found=0;
+        statusPanel.updateInfo(tries,found);
 
     }
     
