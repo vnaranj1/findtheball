@@ -23,6 +23,9 @@ public class GamePanel extends JPanel implements ActionListener{
     //The list of all the little panels that are shown
     private List<LittlePanel> panels =new ArrayList();
     
+    //The panel showing the status of the game
+    private InfoPanel statusPanel;
+    
     //Total number of panels
     private final int PANELS=9;
     //Number of little panels in arow of the game panel
@@ -121,6 +124,7 @@ public class GamePanel extends JPanel implements ActionListener{
         
         //Adds this try to the counter of tries
         tries++;
+        statusPanel.updateInfo(tries,found);
 
         //Flip the little panel selected
         JButton button= (JButton)e.getSource();
@@ -132,6 +136,7 @@ public class GamePanel extends JPanel implements ActionListener{
         if (panel.isPrizePanel()){
             
             found++;
+            statusPanel.updateInfo(tries,found);
             if (found==prizes){
                 //Game Over
                 endedGame=true;
@@ -151,8 +156,8 @@ public class GamePanel extends JPanel implements ActionListener{
                 this, 
                 "Has perdut.  Número d'intets exhaurit", 
                 "Ended game", 
-                JOptionPane.INFORMATION_MESSAGE);
-        }        
+                JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     /**
@@ -201,42 +206,11 @@ public class GamePanel extends JPanel implements ActionListener{
     }
     
     private void initializeInfoPanels() {
-        //Initialize Layout
-        
-        //The info Panel at east of gamepanel
-        //JPanel infoPanel=new  JPanel(new BorderLayout());
-        //add(infoPanel,BorderLayout.EAST);
-        
         //At north of the info panel, the info relative to configuration
-        JPanel northPanel =new JPanel(new GridLayout(1,2));
-                
-        JLabel lTries =new JLabel ("Intents permesos: ");
-        JLabel lTriesValue =new JLabel (""+maxTries);
-        JLabel lPrizes =new JLabel ("Número de premis: ");
-        JLabel lPrizesValue =new JLabel (""+prizes);
+        add(new InfoPanel("Intents permesos",maxTries,"Número de premis",prizes),BorderLayout.NORTH);        
         
-        northPanel.add(lTries);
-        northPanel.add(lTriesValue);
-        northPanel.add(lPrizes);
-        northPanel.add(lPrizesValue);
-        
-        add(northPanel,BorderLayout.NORTH);
-        
-        //At south of the info panel, the info relative to configuration
-        JPanel southPanel =new JPanel(new GridLayout(1,2));
-                
-        JLabel lGameTries =new JLabel ("Número intents: ");
-        JLabel lGameTriesValue =new JLabel (""+tries);
-        JLabel lGamePrizes =new JLabel ("Premis aconseguits: ");
-        JLabel lGamePrizesValue =new JLabel (""+found);
-        
-        southPanel.add(lGameTries);
-        southPanel.add(lGameTriesValue);
-        southPanel.add(lGamePrizes);
-        southPanel.add(lGamePrizesValue);
-        
-        add(southPanel,BorderLayout.SOUTH);
-        
+        statusPanel =new InfoPanel("Número D'intents: ",tries,"Premis aconseguits: ",found);
+        add(statusPanel,BorderLayout.SOUTH);        
         
     }
     /**
