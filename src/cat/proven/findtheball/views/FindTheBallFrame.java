@@ -171,7 +171,11 @@ public class FindTheBallFrame extends JFrame implements ActionListener {
      * Displays about dialog
      */
     private void aboutDialog() {
-        JOptionPane.showMessageDialog(this, aboutMessage, "About", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(
+                this, 
+                aboutMessage, 
+                "About", 
+                JOptionPane.INFORMATION_MESSAGE);
     }
 
     

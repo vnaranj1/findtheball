@@ -118,5 +118,12 @@ public class LittlePanel extends JPanel{
     }
 
     
+    /**
+     * 
+     */
+    public boolean isPrizePanel(){
+        return isPrizePanel;
+    }
+    
     
 }
