@@ -13,4 +13,13 @@ import javax.swing.JPanel;
  */
 public class ConfigPanel extends JPanel{
     
+    
+    public int getTries(){
+        return 6;
+    }
+
+    public int getPrizes(){
+        return 1;
+    }
+    
 }

@@ -1,20 +1,16 @@
 package cat.proven.findtheball.views;
 
-import cat.proven.findtheball.model.FindTheBall;
-import java.awt.CardLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -26,9 +22,18 @@ public class GamePanel extends JPanel implements ActionListener{
     //Total number of panels
     private final int PANELS=9;
     //Number of little panels in arow of the game panel
-    private final int WIDHT=3;
+    private final int WIDTH=3;
     //Number of little panels in arow of the game panel
     private final int HEIGHT=3;
+    
+    //max number of tries to get the prize
+    int maxTries;
+    
+    //Tries counter
+    int tries;
+    
+    //Number of prizes
+    int prizes;
     
     //To know if the game has ended
     boolean endedGame=false;
@@ -52,10 +57,16 @@ public class GamePanel extends JPanel implements ActionListener{
         
         //Reset all panels.  For each panel: show buttons and 
         resetPanels();
+        
+        //Sets the initial maximum number of tries and prizes
+        maxTries=3;
+        prizes=1;
     }
 
     /**
-     * Method to attend the events produced in the little panels
+     * Method to attend the events produced.
+     * Listen to flip action produced in the little panels
+     * Listen to config action produced in condiguration panel
      * @param e The event that that generates this action
      */
     @Override
@@ -67,8 +78,12 @@ public class GamePanel extends JPanel implements ActionListener{
         //flip the little panel and show the image
         switch (action) {
             case "flip":
-                showImage(e);
+                flipBoard(e);
                 break;
+            case "config":
+                resetConfig(e);
+                break;
+
         }
         System.out.println("Execution action on Game Panel: " + action);
 
@@ -80,23 +95,27 @@ public class GamePanel extends JPanel implements ActionListener{
      * If the  little panel is priced, then shows a message, and stops the game
      * @param e the source event of the action
      */
-    private void showImage(ActionEvent e){      
+    private void flipBoard(ActionEvent e){      
         
         // Only works while the game is been played
         if (endedGame) {
             JOptionPane.showMessageDialog(
                 this, 
-                "Juego finalizado", 
+                "Joc  Finalitzat", 
                 "Ended game", 
                 JOptionPane.INFORMATION_MESSAGE);
 
             return;
         }
         
+        
         //Flip the little panel selected
         JButton button= (JButton)e.getSource();
         LittlePanel panel = (LittlePanel)button.getParent();
         panel.showImage();
+        
+        //Adds this try to the counter of tries
+        tries++;
         
         //Check the kind of little panel selected
         //if the selected little panel is not the one that contains the image, 
@@ -106,10 +125,37 @@ public class GamePanel extends JPanel implements ActionListener{
             //Show message
             JOptionPane.showMessageDialog(
                 this, 
-                "Enhora buena.  Imagen en contrada", 
+                "Enhorabona.  Has trobat la imatge!!", 
                 "Ended game", 
                 JOptionPane.INFORMATION_MESSAGE);
         }
+        //If was the last try, then the game is over, and the player looses
+        else if (tries>=maxTries) {
+            endedGame=true;
+            JOptionPane.showMessageDialog(
+                this, 
+                "Has perdut.  Número d'intets exhaurit", 
+                "Ended game", 
+                JOptionPane.INFORMATION_MESSAGE);
+
+            return;
+        }
+        
+    }
+    
+    /**
+     * Updates the configuration of the game when the ok button of the config
+     * panel gets pressed
+     * @param e 
+     */
+    private void resetConfig(ActionEvent e){
+
+        JButton button= (JButton)e.getSource();
+        ConfigPanel panel = (ConfigPanel)button.getParent();
+
+        maxTries=panel.getTries();
+        prizes=panel.getPrizes();
+        
         
     }
     
@@ -120,7 +166,7 @@ public class GamePanel extends JPanel implements ActionListener{
      */
     private void initializePanels(BufferedImage nothingImage, BufferedImage somethingImage) {
         //Initialize Layout
-        setLayout(new GridLayout(HEIGHT,WIDTH));
+        setLayout(new GridLayout(HEIGHT, WIDTH));
 
         //Initialize little panels
         for (int i = 0; i < PANELS; i++) {
@@ -148,6 +194,9 @@ public class GamePanel extends JPanel implements ActionListener{
         
         //Start game
         endedGame=false;
+        
+        //Initialize number of tries
+        tries=0;
 
     }
     
