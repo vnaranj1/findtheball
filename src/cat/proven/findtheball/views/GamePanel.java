@@ -1,5 +1,7 @@
 package cat.proven.findtheball.views;
 
+import java.awt.BorderLayout;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,7 +12,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -49,19 +53,19 @@ public class GamePanel extends JPanel implements ActionListener{
     //Components initialization
     private void initComponents() throws IOException {
         
+        //Sets the initial maximum number of tries and prizes
+        maxTries=6;
+        prizes=2;
+        found=0;
+
         //Load images
         File f = new File ("hola");
         System.out.println(f.getAbsolutePath());
         BufferedImage nothingImage = ImageIO.read(new File("images/nothing.png"));
         BufferedImage somethingImage = ImageIO.read(new File("images/ball.png"));
-        
+                
         //Initialize little panels: set the button and the image of each panel
         initializePanels(nothingImage, somethingImage);
-        
-        //Sets the initial maximum number of tries and prizes
-        maxTries=6;
-        prizes=2;
-        found=0;
         
         //Reset all panels.  For each panel: show buttons and 
         resetPanels();
@@ -103,7 +107,6 @@ public class GamePanel extends JPanel implements ActionListener{
      * @param e the source event of the action
      */
     private void flipBoard(ActionEvent e){      
-        System.out.println("tries: "+tries+" maxtries: "+maxTries);
         
         // Only works while the game is been played
         if (endedGame) {
@@ -116,15 +119,14 @@ public class GamePanel extends JPanel implements ActionListener{
             return;
         }
         
-        
+        //Adds this try to the counter of tries
+        tries++;
+
         //Flip the little panel selected
         JButton button= (JButton)e.getSource();
         LittlePanel panel = (LittlePanel)button.getParent();
         panel.showImage();
-        
-        //Adds this try to the counter of tries
-        tries++;
-        
+                
         //Check the kind of little panel selected
         //if the selected little panel is not the one that contains the image, 
         if (panel.isPrizePanel()){
@@ -150,8 +152,7 @@ public class GamePanel extends JPanel implements ActionListener{
                 "Has perdut.  Número d'intets exhaurit", 
                 "Ended game", 
                 JOptionPane.INFORMATION_MESSAGE);
-        }
-        
+        }        
     }
     
     /**
@@ -177,16 +178,66 @@ public class GamePanel extends JPanel implements ActionListener{
      * @param somethingImage The image of the ball that whe are looking for 
      */
     private void initializePanels(BufferedImage nothingImage, BufferedImage somethingImage) {
+
+        setLayout(new BorderLayout());
+        
+        
+        initializeCenterPanel(nothingImage, somethingImage);
+        initializeInfoPanels();
+    }
+
+    private void initializeCenterPanel(BufferedImage nothingImage, BufferedImage somethingImage) {
         //Initialize Layout
-        setLayout(new GridLayout(HEIGHT, WIDTH));
+        JPanel centerPanel =new JPanel(new GridLayout(HEIGHT,WIDTH));
+        add(centerPanel,BorderLayout.CENTER);
 
         //Initialize little panels
         for (int i = 0; i < PANELS; i++) {
             //Adds the panel to a list of littlepanels, setting the nothingImage of the pannel
             panels.add(new LittlePanel(this,nothingImage, somethingImage));
             //Adds the panel to the game panel
-            add(panels.get(i));            
+            centerPanel.add(panels.get(i));            
         }
+    }
+    
+    private void initializeInfoPanels() {
+        //Initialize Layout
+        
+        //The info Panel at east of gamepanel
+        //JPanel infoPanel=new  JPanel(new BorderLayout());
+        //add(infoPanel,BorderLayout.EAST);
+        
+        //At north of the info panel, the info relative to configuration
+        JPanel northPanel =new JPanel(new GridLayout(1,2));
+                
+        JLabel lTries =new JLabel ("Intents permesos: ");
+        JLabel lTriesValue =new JLabel (""+maxTries);
+        JLabel lPrizes =new JLabel ("Número de premis: ");
+        JLabel lPrizesValue =new JLabel (""+prizes);
+        
+        northPanel.add(lTries);
+        northPanel.add(lTriesValue);
+        northPanel.add(lPrizes);
+        northPanel.add(lPrizesValue);
+        
+        add(northPanel,BorderLayout.NORTH);
+        
+        //At south of the info panel, the info relative to configuration
+        JPanel southPanel =new JPanel(new GridLayout(1,2));
+                
+        JLabel lGameTries =new JLabel ("Número intents: ");
+        JLabel lGameTriesValue =new JLabel (""+tries);
+        JLabel lGamePrizes =new JLabel ("Premis aconseguits: ");
+        JLabel lGamePrizesValue =new JLabel (""+found);
+        
+        southPanel.add(lGameTries);
+        southPanel.add(lGameTriesValue);
+        southPanel.add(lGamePrizes);
+        southPanel.add(lGamePrizesValue);
+        
+        add(southPanel,BorderLayout.SOUTH);
+        
+        
     }
     /**
      * Sets the little panels to the initial configuration to be able to start the game
